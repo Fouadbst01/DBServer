@@ -1,18 +1,18 @@
 package Routes;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Request implements Serializable{
 
     private String type;
-    private String Route;
-    private Map<String,Object> body;
+    private String Table;
+    private Map<String,String> body;
 
-    public Request(String type, String route, Map<String, Object> body) {
-        this.type = type;
-        Route = route;
-        this.body = body;
+    public Request(String route) {
+        Table = route;
     }
 
     public String getType() {
@@ -23,19 +23,54 @@ public class Request implements Serializable{
         this.type = type;
     }
 
-    public String getRoute() {
-        return Route;
+    public String getTable() {
+        return Table;
     }
 
-    public void setRoute(String route) {
-        Route = route;
+    public void setTable(String table) {
+        Table = table;
     }
 
-    public Map<String, Object> getBody() {
+    public Map<String, String> getBody() {
         return body;
     }
 
-    public void setBody(Map<String, Object> body) {
+    public void setBody(Map<String, String> body) {
         this.body = body;
     }
+
+
+    public Request findAll(){
+        this.type="GET";
+        return this;
+    }
+
+    public Request findByID(){
+        return this;
+    }
+
+    public Request Where(Map<String,String> map){
+        body = map;
+        return this;
+    }
+
+    public String BuildSQLStatment(Request rs){
+
+        StringBuilder Querry = new StringBuilder("SELECT * FROM "+rs.getTable());
+
+        AtomicInteger i= new AtomicInteger();
+
+        if(!rs.getBody().isEmpty()){
+            Querry.append(" WHERE ");
+            rs.getBody().forEach((k,v)->{
+                if(i.get() ==rs.getBody().size()-1)
+                    Querry.append(k+"="+v);
+                else
+                    Querry.append(k+"="+v+" AND ");
+                i.getAndIncrement();
+            });
+        }
+        return Querry.toString();
+    }
+
 }

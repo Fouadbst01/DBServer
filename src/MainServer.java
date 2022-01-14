@@ -1,7 +1,4 @@
-import DBConnection.ConnectionDB;
-import Data.Professor;
-import Routes.GETRoute;
-import Routes.POSTRoute;
+import Routes.Routes;
 import Routes.Request;
 import Routes.Respond;
 
@@ -9,7 +6,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.*;
 
 
 public class MainServer {
@@ -28,21 +24,12 @@ public class MainServer {
                 //get client reques
                 Request req = (Request)ois.readObject();
                 Respond respond=null;
-                switch (req.getType()){
-                    case "GET" :
-                        respond = GETRoute.mapGetRequest.get(req.getRoute()).apply(req);
-                        System.out.println();
-                        break;
-                    case "POST":
-                        respond = POSTRoute.mapPOSTRequest.get(req.getRoute()).apply(req);
-                        break;
-                    case "PUT":
-                        break;
-                    case "DELETE":
-                        break;
-                }
-                oos.writeObject(respond);
 
+                //req type : GET PUT POST DELETE
+                respond = Routes.mapRequest.get(req.getType()).apply(req);
+
+                //sending response
+                oos.writeObject(respond);
             }
         } catch (Exception e) {
             e.printStackTrace();

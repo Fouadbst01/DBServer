@@ -13,9 +13,14 @@ public class Client {
         Socket socket = new Socket("localhost",8080);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-        Map<String,Object> map = new HashMap<>();
-        map.put("value",new Professor("fouad","el bssita"));
-        Request rs = new Request("GET","PROFESSOR",map);
+
+        Request rs = new Request("PROFESSOR");
+        rs.findAll().Where(new HashMap<String,String>(){
+            {
+                put("id","1");
+            }
+        });
+
         out.writeObject(rs);
         Respond respond = (Respond) ois.readObject();
         List<Professor> p =((List<Professor>)respond.getBody());

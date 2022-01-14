@@ -14,21 +14,22 @@ import java.util.Map;
 import java.util.function.Function;
 
 
-public class GETRoute {
-    public static Map<String, Function<Request, Respond>> mapGetRequest;
+public class Routes {
+    public static Map<String, Function<Request, Respond>> mapRequest;
     static {
         Connection con = ConnectionDB.getConnection();
-        mapGetRequest = new HashMap<>();
+        mapRequest = new HashMap<>();
 
         //GET_ALL_PROF
-        mapGetRequest.put("PROFESSOR",request ->{
+        mapRequest.put("GET",request ->{
             List<Object> l = new ArrayList<>();
+
             Statement stm = null;
             Respond respond=null;
-            String Querry ="SELECT * FROM professor";
+            System.out.println("|"+request.BuildSQLStatment(request)+"|");
             try {
                 stm = con.createStatement();
-                ResultSet rs =stm.executeQuery(Querry);
+                ResultSet rs =stm.executeQuery(request.BuildSQLStatment(request));
 
                 while (rs.next()){
                     Professor professor = new Professor(rs.getInt("id"),rs.getString("name"),rs.getString("prenom"));
@@ -38,12 +39,23 @@ public class GETRoute {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             return respond;
         });
 
-        //GET_ALL_STUDENT
-        mapGetRequest.put("STUDENT",request ->{
+        //PUT
+        mapRequest.put("PUT",request ->{
            return null;
+        });
+
+        //POST
+        mapRequest.put("POST",request ->{
+            return null;
+        });
+
+        //DELETE
+        mapRequest.put("DELETE",request ->{
+            return null;
         });
     }
 }
