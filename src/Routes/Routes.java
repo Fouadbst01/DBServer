@@ -3,10 +3,7 @@ package Routes;
 import DBConnection.ConnectionDB;
 import Data.Professor;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +23,10 @@ public class Routes {
 
             Statement stm = null;
             Respond respond=null;
-            System.out.println("|"+request.BuildSQLStatment(request)+"|");
+
             try {
                 stm = con.createStatement();
-                ResultSet rs =stm.executeQuery(request.BuildSQLStatment(request));
+                ResultSet rs =stm.executeQuery(request.BuildSQLGET());
 
                 while (rs.next()){
                     Professor professor = new Professor(rs.getInt("id"),rs.getString("name"),rs.getString("prenom"));
@@ -39,17 +36,25 @@ public class Routes {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
             return respond;
         });
 
         //PUT
         mapRequest.put("PUT",request ->{
+            System.out.println(request.BuildSQLPUT());
+            //PreparedStatement preparedStatement = con.prepareStatement();
            return null;
         });
 
         //POST
         mapRequest.put("POST",request ->{
+            try {
+                PreparedStatement pr = con.prepareStatement(request.BuildSQLPOST(),Statement.RETURN_GENERATED_KEYS);
+                pr.executeUpdate();
+                //ResultSet rs = pr.getGeneratedKeys();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             return null;
         });
 

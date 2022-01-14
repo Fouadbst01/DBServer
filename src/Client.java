@@ -15,15 +15,27 @@ public class Client {
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
         Request rs = new Request("PROFESSOR");
-        rs.findAll().Where(new HashMap<String,String>(){
+        rs.findAll();/*.Where(new HashMap<String,String>(){
             {
                 put("id","1");
             }
-        });
+        });*/
+
+        /*rs.PUT(new HashMap<String,String>(){
+            {
+                put("name","'3alale'");
+                put("prenom","'ahmed'");
+            }
+        }).Where(new HashMap<String,String>(){
+            {
+                put("id","5");
+            }
+        });*/
 
         out.writeObject(rs);
         Respond respond = (Respond) ois.readObject();
         List<Professor> p =((List<Professor>)respond.getBody());
-        System.out.println(p.get(0).getId()+" "+p.get(0).getName()+" "+p.get(0).getPrenom());
+        for(int i=0;i<p.size();i++)
+            System.out.println(p.get(i).getId()+" "+p.get(i).getName()+" "+p.get(i).getPrenom());
     }
 }
