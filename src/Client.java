@@ -15,7 +15,7 @@ public class Client {
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
         Request rs = new Request("PROFESSOR");
-        rs.findAll();/*.Where(new HashMap<String,String>(){
+        /*rs.findAll().Where(new HashMap<String,String>(){
             {
                 put("id","1");
             }
@@ -31,7 +31,12 @@ public class Client {
                 put("id","5");
             }
         });*/
-
+        rs.POST(new HashMap<>(){
+                {
+                    put("name","'toti'");
+                    put("prenom","'titi'");
+                }
+        });
         out.writeObject(rs);
         Respond respond = (Respond) ois.readObject();
         List<Professor> p =((List<Professor>)respond.getBody());

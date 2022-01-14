@@ -92,9 +92,9 @@ public class Request implements Serializable{
         AtomicInteger i =new AtomicInteger();
         StringBuilder Q2=new StringBuilder(" VALUES (");
         if(!body.isEmpty()){
-            Querry.append("(");
+            Querry.append("( ");
             body.get("DATA").forEach((k,v)->{
-                if(i.get() == body.size()-1){
+                if(i.get() == body.get("DATA").size()-1){
                     Q2.append(v+")");
                     Querry.append(k+")");
                 }

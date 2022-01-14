@@ -10,6 +10,11 @@ public class Respond implements Serializable {
     private int status;
     private Object body;
 
+    public Respond(int status){
+        this.status = status;
+        this.body = null;
+    }
+
     public Respond(int status, Object body){
         this.status = status;
         this.body = body;

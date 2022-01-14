@@ -41,26 +41,38 @@ public class Routes {
 
         //PUT
         mapRequest.put("PUT",request ->{
-            System.out.println(request.BuildSQLPUT());
-            //PreparedStatement preparedStatement = con.prepareStatement();
+            PreparedStatement preparedStatement = null;
+            try {
+                preparedStatement = con.prepareStatement(request.BuildSQLPUT());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
            return null;
         });
 
         //POST
         mapRequest.put("POST",request ->{
+            List<Object> l = new ArrayList<>();
+
             try {
                 PreparedStatement pr = con.prepareStatement(request.BuildSQLPOST(),Statement.RETURN_GENERATED_KEYS);
+                System.out.println(request.BuildSQLPOST());
                 pr.executeUpdate();
-                //ResultSet rs = pr.getGeneratedKeys();
+                ResultSet rsID = pr.getGeneratedKeys();
+                rsID.next();
+                Professor professor = new Professor(rsID.getInt(1),request.getBody().get("DATA").get("name"),request.getBody().get("DATA").get("prenom"));
+                l.add(professor);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            return null;
+
+            return new Respond(Respond.SUCCESSFUL,l);
         });
 
         //DELETE
         mapRequest.put("DELETE",request ->{
-            return null;
+            return new Respond(Respond.SUCCESSFUL);
         });
     }
 }
