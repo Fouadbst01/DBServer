@@ -2,24 +2,24 @@ package Data;
 
 import java.io.Serializable;
 
-public class Professor implements Serializable {
+public class Professor1 implements Serializable {
     private int id;
     private String Name;
     private String prenom;
 
-    public Professor(int id, String name, String prenom) {
+    public Professor1(int id, String name, String prenom) {
         this.id = id;
         Name = name;
         this.prenom = prenom;
     }
 
-    public Professor(String name, String prenom) {
+    public Professor1(String name, String prenom) {
         this.id = id;
         Name = name;
         this.prenom = prenom;
     }
 
-    public Professor(String Name){
+    public Professor1(String Name){
         this.Name=Name;
     }
 
